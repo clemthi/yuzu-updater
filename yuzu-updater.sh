@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-INSTALL_FOLDER="/home/deck"
+INSTALL_FOLDER="/home/deck/yuzu-ea"
 if [[ $# -ge 1 ]] ; then
     INSTALL_FOLDER=$1
 fi
@@ -21,9 +21,11 @@ if [[ -f $YUZU_FILE && -f $YUZU_EXE ]] ; then
 else
     echo Downloading ...
     wget --quiet --output-document=$YUZU_FILE $YUZU_URL
-    cp $YUZU_FILE $YUZU_EXE
+    mv $YUZU_FILE $YUZU_EXE
     chmod +x $YUZU_EXE
 
+    # create an empty file to know which version is installed
+    touch $YUZU_FILE
     echo Deleting old version ...
     find $INSTALL_FOLDER -name '*.AppImage' '!' -name $(basename $YUZU_URL) '!' -name $(basename $YUZU_EXE) -exec rm -- '{}' +
 fi
